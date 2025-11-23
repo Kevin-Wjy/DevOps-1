@@ -17,9 +17,20 @@ jobs:
         with:
           version: v0.21.0
 
+      - name: Log in to GHCR
+        run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull image from GHCR
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/$OWNER/myapp:latest
+          docker pull $IMAGE
+
       - name: Load Docker image to Kind
         run: |
-          kind load docker-image myapp:latest --name kind
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/$OWNER/myapp:latest
+          kind load docker-image $IMAGE --name kind
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -28,5 +39,5 @@ jobs:
 
       - name: Terraform Init & Apply
         run: |
-          terraform init terraform/
-          terraform apply -auto-approve terraform/
+          terraform -chdir=terraform init
+          terraform -chdir=terraform apply -auto-approve
