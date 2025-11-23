@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "myapp" {
       spec {
         container {
           name  = "myapp"
-          image = "myapp:latest"  # image lokal yang di-build di CI
+          image = "ghcr.io/${var.owner}/myapp:latest"
           port {
             container_port = 8000
           }
