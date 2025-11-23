@@ -29,6 +29,9 @@ jobs:
       - name: Format check
         run: black --check app/
 
+      - name: Add project root to PYTHONPATH
+        run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+
       - name: Unit Tests
         run: pytest tests/test_unit.py
 
