@@ -52,11 +52,14 @@ jobs:
       - name: Add project root to PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
-      - name: Unit Tests
-        run: pytest tests/test_unit.py
-
-      - name: Integration Tests
-        run: pytest tests/test_integration.py
+      - name: Run tests
+        run: pytest --junitxml=test-report.xml
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: test-report.xml
 
   security:
     runs-on: ubuntu-latest
