@@ -53,7 +53,7 @@ jobs:
         run: echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
 
       - name: Run tests
-        run: pytest --junitxml=test-report.xml
+        run: pytest --maxfail=1 --disable-warnings -q --junitxml=test-report.xml
       
       - name: Upload test results
         uses: actions/upload-artifact@v4
